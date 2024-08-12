@@ -18,7 +18,6 @@ const categoryData = [
 const mealData = [
   {
     name: "Shakshuka",
-
     image: "https://www.themealdb.com/images/media/meals/g373701551450225.jpg",
   },
 

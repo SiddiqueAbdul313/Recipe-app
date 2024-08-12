@@ -1,3 +1,4 @@
+"use client";
 import {
   StyleSheet,
   Text,
@@ -7,7 +8,7 @@ import {
   Image,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -16,10 +17,28 @@ import { StatusBar } from "expo-status-bar";
 import { COLORS, images, SIZES } from "../constants";
 import { BellIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import Categories from "../components/categories";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import Recipes from "../components/recipes";
 
-const HomeScreen = ({navigation}) => {
+const fetchCategories = async () => {
+  const response = await axios.get(
+    "https://themealdb.com/api/json/v1/1/categories.php"
+  );
+  return response.data.categories;
+};
 
-  const [activeCategory, setActiveCategory] = useState('Beef')
+const HomeScreen = ({ navigation }) => {
+  const [activeCategory, setActiveCategory] = useState("Beef");
+  
+
+  const {
+    data: categories = [],
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+  });
+
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -37,7 +56,7 @@ const HomeScreen = ({navigation}) => {
           />
           <BellIcon size={hp(4)} color={COLORS.darkgray} />
         </View>
-        {/* greet and punchline*/}
+        {/* greet and punchline */}
         <View className="mx-4 space-y-2 mb-2">
           <Text style={{ fontSize: hp(2.1), color: COLORS.darkgray }}>
             Hello! Abdul
@@ -75,7 +94,18 @@ const HomeScreen = ({navigation}) => {
         </View>
         {/* categories */}
         <View>
-        <Categories activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+          {categories.length > 0 && (
+            <Categories
+              categories={categories}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+            />
+          )}
+        </View>
+
+        {/* recipes */}
+        <View>
+          <Recipes categories={categories} />
         </View>
       </ScrollView>
     </SafeAreaView>
