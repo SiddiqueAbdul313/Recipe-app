@@ -7,36 +7,26 @@ import {
 import { COLORS, dummyData, SIZES } from "../constants";
 import MasonryList from "@react-native-seoul/masonry-list";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import Loading from "./loading";
+import { CachedImage } from "../helpers/image";
 
-export default function Recipes({ categories }) {
+export default function Recipes({ categories = [], meals = [] }) {
   return (
     <View className="mx-4 space-y-3">
-      <Text className="text-darkgray text-3xl font-semibold">Recipes</Text>
+      <Text
+        className="text-3xl font-semibold"
+        style={{ color: COLORS.darkgray }}
+      >
+        Recipes
+      </Text>
       <View>
-        {categories.length == 0 ? (
-          <View
-            style={{
-              backgroundColor: COLORS.primary,
-              width: "100%",
-              height: hp(20),
-            }}
-            className="flex items-center justify-center rounded-lg"
-          >
-            <Text
-              style={{
-                fontSize: hp(3),
-                color: COLORS.white,
-                fontWeight: 700,
-                letterSpacing: 0.5,
-              }}
-            >
-              No Recipes Found
-            </Text>
-          </View>
+        {/* Check if categories or recipes are undefined or have zero length */}
+        {categories.length === 0 || meals.length === 0 ? (
+          <Loading size="large" className="mt-20" color={COLORS.primary} />
         ) : (
           <MasonryList
-            data={dummyData.mealData}
-            keyExtractor={(item) => item.id}
+            data={meals}
+            keyExtractor={(item) => item.idMeal}
             numColumns={2}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, i }) => <RecipeCard item={item} index={i} />}
@@ -67,7 +57,7 @@ const RecipeCard = ({ item, index }) => {
         }}
       >
         <Image
-          source={{ uri: item.image }}
+          source={{ uri: item.strMealThumb }}
           style={{
             height: index % 3 === 0 ? hp(35) : hp(30),
             width: "100%",
@@ -84,7 +74,9 @@ const RecipeCard = ({ item, index }) => {
             letterSpacing: 0.7,
           }}
         >
-          {item.name.length > 20 ? item.name.slice(0, 20) + "..." : item.name}
+          {item.strMeal.length > 20
+            ? item.strMeal.slice(0, 20) + "..."
+            : item.strMeal}
         </Text>
       </Pressable>
     </Animated.View>

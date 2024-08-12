@@ -28,17 +28,26 @@ const fetchCategories = async () => {
   return response.data.categories;
 };
 
+const fetchRecipes = async (category) => {
+  const response = await axios.get(
+    `https://themealdb.com/api/json/v1/1/filter.php?c=${category}`
+  );
+  return response.data.meals;
+};
+
 const HomeScreen = ({ navigation }) => {
   const [activeCategory, setActiveCategory] = useState("Beef");
-  
 
-  const {
-    data: categories = [],
-  } = useQuery({
+  const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
   });
 
+  const { data: meals = [] } = useQuery({
+    queryKey: ["meals", activeCategory], 
+    queryFn: () => fetchRecipes(activeCategory), 
+    enabled: !!activeCategory, 
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -73,7 +82,7 @@ const HomeScreen = ({ navigation }) => {
             className="font-semibold"
             style={{ color: COLORS.darkgray, fontSize: hp(3.7) }}
           >
-            It's all at <Text style={{ color: COLORS.secondary }}>Home</Text>
+            It's all at <Text style={{ color: COLORS.secondary }}>home</Text>
           </Text>
         </View>
         {/* Searchbar */}
@@ -105,7 +114,7 @@ const HomeScreen = ({ navigation }) => {
 
         {/* recipes */}
         <View>
-          <Recipes categories={categories} />
+          <Recipes categories={categories} meals={meals} />
         </View>
       </ScrollView>
     </SafeAreaView>
