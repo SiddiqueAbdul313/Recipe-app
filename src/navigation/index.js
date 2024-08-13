@@ -23,10 +23,10 @@ export const AppNavigation = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={"HomeScreen"}
+        // initialRouteName={""}
       >
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="RecipeDetailScreen" component={RecipeDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "recipe-app",
+    "name": "Foodie",
     "slug": "recipe-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,10 +18,22 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foodie-logo.png",
         "backgroundColor": "#ed2f28"
-      }
+      },
+      "package": "com.siddiqueabdul313.recipeapp"
     },
     "web": {
       "favicon": "./assets/images/foodie-logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5a0817cb-7861-4d9d-99c4-36f4d23dfbf5"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/5a0817cb-7861-4d9d-99c4-36f4d23dfbf5"
     }
   }
 }
