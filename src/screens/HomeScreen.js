@@ -1,4 +1,3 @@
-"use client";
 import {
   StyleSheet,
   Text,
@@ -28,15 +27,22 @@ const fetchCategories = async () => {
   return response.data.categories;
 };
 
-const fetchRecipes = async (category) => {
+const fetchRecipes = async (category, searchTerm) => {
   const response = await axios.get(
     `https://themealdb.com/api/json/v1/1/filter.php?c=${category}`
   );
-  return response.data.meals;
+  const meals = response.data.meals;
+  if (searchTerm) {
+    return meals.filter(meal =>
+      meal.strMeal.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+  return meals;
 };
 
 const HomeScreen = ({ navigation }) => {
   const [activeCategory, setActiveCategory] = useState("Beef");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
@@ -44,8 +50,8 @@ const HomeScreen = ({ navigation }) => {
   });
 
   const { data: meals = [] } = useQuery({
-    queryKey: ["meals", activeCategory], 
-    queryFn: () => fetchRecipes(activeCategory), 
+    queryKey: ["meals", activeCategory, searchTerm],
+    queryFn: () => fetchRecipes(activeCategory, searchTerm),
     enabled: !!activeCategory, 
   });
 
@@ -90,6 +96,8 @@ const HomeScreen = ({ navigation }) => {
           <TextInput
             placeholder="Search recipe..."
             placeholderTextColor={COLORS.gray}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
             style={{
               fontSize: hp(2.1),
               paddingLeft: SIZES.padding,
