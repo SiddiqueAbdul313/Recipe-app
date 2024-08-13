@@ -3,7 +3,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import HomeScreen from "../screens/HomeScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
-// import { useFonts } from "expo-font";
+import RecipeDetailScreen from "../screens/RecipeDetailScreen";
+
 
 const theme = {
   ...DefaultTheme,
@@ -22,10 +23,11 @@ export const AppNavigation = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={"WelcomeScreen"}
+        initialRouteName={"HomeScreen"}
       >
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+        <Stack.Screen name="RecipeDetailScreen" component={RecipeDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

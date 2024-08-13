@@ -9,8 +9,10 @@ import MasonryList from "@react-native-seoul/masonry-list";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import Loading from "./loading";
 import { CachedImage } from "../helpers/image";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Recipes({ categories = [], meals = [] }) {
+  const navigation = useNavigation()
   return (
     <View className="mx-4 space-y-3">
       <Text
@@ -20,7 +22,6 @@ export default function Recipes({ categories = [], meals = [] }) {
         Recipes
       </Text>
       <View>
-        {/* Check if categories or recipes are undefined or have zero length */}
         {categories.length === 0 || meals.length === 0 ? (
           <Loading size="large" className="mt-20" color={COLORS.primary} />
         ) : (
@@ -29,7 +30,7 @@ export default function Recipes({ categories = [], meals = [] }) {
             keyExtractor={(item) => item.idMeal}
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, i }) => <RecipeCard item={item} index={i} />}
+            renderItem={({ item, i }) => <RecipeCard item={item} index={i} navigation={navigation} />}
             onEndReachedThreshold={0.1}
           />
         )}
@@ -38,7 +39,7 @@ export default function Recipes({ categories = [], meals = [] }) {
   );
 }
 
-const RecipeCard = ({ item, index }) => {
+const RecipeCard = ({ item, index,navigation }) => {
   let isEven = index % 2 === 0;
 
   return (
@@ -55,6 +56,7 @@ const RecipeCard = ({ item, index }) => {
           paddingLeft: isEven ? 0 : SIZES.padding - 2,
           paddingRight: isEven ? SIZES.padding - 2 : 0,
         }}
+        onPress={()=>navigation.navigate("RecipeDetailScreen",{...item})}
       >
         <Image
           source={{ uri: item.strMealThumb }}

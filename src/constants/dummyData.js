@@ -1,3 +1,15 @@
+import {
+  ClockIcon,
+  FireIcon,
+  Square3Stack3DIcon,
+  UsersIcon,
+} from "react-native-heroicons/outline";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+import { COLORS } from "./theme";
+
 const categoryData = [
   {
     name: "Starter",
@@ -41,4 +53,51 @@ const mealData = [
   },
 ];
 
-export default { categoryData, mealData };
+const recipeDetailData = [
+  {
+    icon: (
+      <ClockIcon
+        size={hp(4)}
+        style={{ color: COLORS.primary }}
+        strokeWidth={2}
+      />
+    ),
+    value: "35",
+    label: "Mins",
+  },
+  {
+    icon: (
+      <UsersIcon
+        size={hp(4)}
+        style={{ color: COLORS.primary }}
+        strokeWidth={2}
+      />
+    ),
+    value: "04",
+    label: "Servings",
+  },
+  {
+    icon: (
+      <FireIcon
+        size={hp(4)}
+        style={{ color: COLORS.primary }}
+        strokeWidth={2}
+      />
+    ),
+    value: "180",
+    label: "Cal",
+  },
+  {
+    icon: (
+      <Square3Stack3DIcon
+        size={hp(4)}
+        style={{ color: COLORS.primary }}
+        strokeWidth={2}
+      />
+    ),
+    value: "Steps",
+    label: "Easy",
+  },
+];
+
+export default { categoryData, mealData, recipeDetailData };
