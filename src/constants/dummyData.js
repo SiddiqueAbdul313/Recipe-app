@@ -3,7 +3,7 @@ import {
   FireIcon,
   Square3Stack3DIcon,
   UsersIcon,
-} from "react-native-heroicons/outline";
+} from "react-native-heroicons/solid";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

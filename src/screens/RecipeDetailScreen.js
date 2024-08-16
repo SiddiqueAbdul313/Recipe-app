@@ -10,55 +10,62 @@ import {
 import React, { useEffect, useState } from "react";
 import { COLORS, dummyData, SIZES } from "../constants";
 import { StatusBar } from "expo-status-bar";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import { ChevronLeftIcon, HeartIcon } from "react-native-heroicons/outline";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, FadeIn, FadeInDown } from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  FadeIn,
+  FadeInDown,
+} from "react-native-reanimated";
 import axios from "axios";
 import { WebView } from "react-native-webview";
 import useFavoriteStore from "../../store/store";
 import Toast from "react-native-toast-message";
 
-
 export default function RecipeDetailScreen(props) {
   let item = props.route.params;
   const { favorites, addFavorite, removeFavorite } = useFavoriteStore(); // Access Zustand store
-  const [heartIcon, setHeartIcon] = useState(favorites.some(fav => fav.idMeal === item.idMeal)); // Check if already favorited
+  const [heartIcon, setHeartIcon] = useState(
+    favorites.some((fav) => fav.idMeal === item.idMeal)
+  ); // Check if already favorited
   const [meals, setMeals] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const scale = useSharedValue(1);
 
   const toggleHeartIcon = () => {
-    setHeartIcon(prevState => !prevState);
+    setHeartIcon((prevState) => !prevState);
     scale.value = withSpring(1.2, { stiffness: 200 }, () => {
       scale.value = withSpring(1);
     });
-  
+
     if (heartIcon) {
       removeFavorite(item.idMeal);
       Toast.show({
-        type: 'success',
-        text1: 'Removed from Favorites',
+        type: "success",
+        text1: "Removed from Favorites",
         text2: `${item.strMeal} has been removed from your favorites.`,
       });
     } else {
       addFavorite(item);
       Toast.show({
-        type: 'success',
-        text1: 'Added to Favorites',
+        type: "success",
+        text1: "Added to Favorites",
         text2: `${item.strMeal} has been added to your favorites.`,
-    
       });
     }
   };
-  
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ scale: scale.value }],
     };
   });
-  
 
   useEffect(() => {
     const getMealData = async (id) => {
@@ -102,8 +109,6 @@ export default function RecipeDetailScreen(props) {
     return match ? match[1] : null;
   };
 
-  
-
   return (
     <ScrollView
       className="bg-white flex-1"
@@ -123,7 +128,7 @@ export default function RecipeDetailScreen(props) {
 
       {/* back button and heart icon */}
       <Animated.View
-        className="w-full absolute flex-row justify-between items-center pt-8 px-3"
+        className="w-full absolute flex-row justify-between items-center pt-10 px-3"
         entering={FadeIn.delay(200).duration(1000)}
       >
         <TouchableOpacity
@@ -253,7 +258,10 @@ export default function RecipeDetailScreen(props) {
         </Animated.View>
 
         {/* instructions */}
-        <Animated.View entering={FadeInDown.delay(300).duration(700).springify().damping(12)} className="space-y-4">
+        <Animated.View
+          entering={FadeInDown.delay(300).duration(700).springify().damping(12)}
+          className="space-y-4"
+        >
           <Text
             style={{ fontSize: hp(3), color: COLORS.darkgray, height: hp(4) }}
             className="font-bold flex-1"

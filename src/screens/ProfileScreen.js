@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -20,7 +20,8 @@ import { StatusBar } from "expo-status-bar";
 export default function ProfileScreen() {
   const { favorites } = useFavoriteStore();
   const navigation = useNavigation();
-  const noOfRecipes = favorites.length;
+  const [noOfRecipes, setNoOfRecipes] = useState(favorites.length)
+  // const noOfRecipes = ;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -50,7 +51,7 @@ export default function ProfileScreen() {
                     {noOfRecipes}
                   </Text>
                   <Text className="text-gray-500">
-                    {noOfRecipes == 0 ? "Recipe" : "Recipes"}
+                    {noOfRecipes < 1 ? "Recipe" : "Recipes"}
                   </Text>
                 </View>
                 <View className="items-center">

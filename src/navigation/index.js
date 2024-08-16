@@ -24,7 +24,7 @@ export const AppNavigation = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={""}
+        initialRouteName="WelcomeScreen"
       >
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -34,7 +34,7 @@ export const AppNavigation = () => {
         />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       </Stack.Navigator>
-          <Toast ref={(ref) => Toast.setRef(ref)} position="bottom" />
+      <Toast position="bottom" />
     </NavigationContainer>
   );
 };
