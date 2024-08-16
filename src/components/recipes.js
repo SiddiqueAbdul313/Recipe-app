@@ -1,18 +1,18 @@
-import { Pressable, Text, View, Image, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import { Pressable, Text, View, Image } from "react-native";
+import React from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { COLORS, dummyData, SIZES } from "../constants";
+import { COLORS, SIZES } from "../constants";
 import MasonryList from "@react-native-seoul/masonry-list";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import Loading from "./loading";
-import { CachedImage } from "../helpers/image";
 import { useNavigation } from "@react-navigation/native";
+import Loading from "./loading";
 
 export default function Recipes({ categories = [], meals = [] }) {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+
   return (
     <View className="mx-4 space-y-3">
       <Text
@@ -23,14 +23,18 @@ export default function Recipes({ categories = [], meals = [] }) {
       </Text>
       <View>
         {categories.length === 0 || meals.length === 0 ? (
-          <Loading size="large" className="mt-20" color={COLORS.primary} />
+          <View className="flex-1 justify-center items-center mt-20">
+            <Loading />
+          </View>
         ) : (
           <MasonryList
             data={meals}
             keyExtractor={(item) => item.idMeal}
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, i }) => <RecipeCard item={item} index={i} navigation={navigation} />}
+            renderItem={({ item, i }) => (
+              <RecipeCard item={item} index={i} navigation={navigation} />
+            )}
             onEndReachedThreshold={0.1}
           />
         )}
@@ -39,7 +43,7 @@ export default function Recipes({ categories = [], meals = [] }) {
   );
 }
 
-const RecipeCard = ({ item, index,navigation }) => {
+const RecipeCard = ({ item, index, navigation }) => {
   let isEven = index % 2 === 0;
 
   return (
@@ -56,7 +60,7 @@ const RecipeCard = ({ item, index,navigation }) => {
           paddingLeft: isEven ? 0 : SIZES.padding - 2,
           paddingRight: isEven ? SIZES.padding - 2 : 0,
         }}
-        onPress={()=>navigation.navigate("RecipeDetailScreen",{...item})}
+        onPress={() => navigation.navigate("RecipeDetailScreen", { ...item })}
       >
         <Image
           source={{ uri: item.strMealThumb }}

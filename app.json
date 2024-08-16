@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/images/foodie-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ed2f28"
+      "backgroundColor": "#ff9626"
     },
     "ios": {
       "supportsTablet": true
@@ -17,7 +17,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foodie-logo.png",
-        "backgroundColor": "#ed2f28"
+        "backgroundColor": "#ff9626"
       },
       "package": "com.siddiqueabdul313.recipeapp"
     },

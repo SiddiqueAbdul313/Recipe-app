@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import {
@@ -33,7 +34,7 @@ const fetchRecipes = async (category, searchTerm) => {
   );
   const meals = response.data.meals;
   if (searchTerm) {
-    return meals.filter(meal =>
+    return meals.filter((meal) =>
       meal.strMeal.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
@@ -52,7 +53,7 @@ const HomeScreen = ({ navigation }) => {
   const { data: meals = [] } = useQuery({
     queryKey: ["meals", activeCategory, searchTerm],
     queryFn: () => fetchRecipes(activeCategory, searchTerm),
-    enabled: !!activeCategory, 
+    enabled: !!activeCategory,
   });
 
   return (
@@ -64,11 +65,16 @@ const HomeScreen = ({ navigation }) => {
         className="space-y-6 pt-8"
       >
         <View className="mx-3 flex-row justify-between items-center mb-2">
-          <Image
-            source={images.AvatarImage}
-            style={{ height: hp(5), width: hp(5) }}
-            resizeMode="contain"
-          />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("ProfileScreen")}
+          >
+            <Image
+              source={images.AvatarImage}
+              style={{ height: hp(5), width: hp(5) }}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
           <BellIcon size={hp(4)} color={COLORS.darkgray} />
         </View>
         {/* greet and punchline */}
