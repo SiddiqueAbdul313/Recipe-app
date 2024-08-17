@@ -6,6 +6,7 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import RecipeDetailScreen from "../screens/RecipeDetailScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import Toast from "react-native-toast-message";
+import NotificationScreen from "../screens/NotificationScreen";
 
 const theme = {
   ...DefaultTheme,
@@ -24,7 +25,7 @@ export const AppNavigation = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName="WelcomeScreen"
+        initialRouteName=""
       >
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -33,6 +34,10 @@ export const AppNavigation = () => {
           component={RecipeDetailScreen}
         />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+        <Stack.Screen
+          name="NotificationScreen"
+          component={NotificationScreen}
+        />
       </Stack.Navigator>
       <Toast position="bottom" />
     </NavigationContainer>

@@ -15,7 +15,7 @@ import {
 } from "react-native-responsive-screen";
 import { StatusBar } from "expo-status-bar";
 import { COLORS, images, SIZES } from "../constants";
-import { BellIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
+import { BellIcon, MagnifyingGlassIcon } from "react-native-heroicons/solid";
 import Categories from "../components/categories";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -75,7 +75,12 @@ const HomeScreen = ({ navigation }) => {
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <BellIcon size={hp(4)} color={COLORS.darkgray} />
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("NotificationScreen")}
+          >
+            <BellIcon size={hp(4)} color={COLORS.primary} />
+          </TouchableOpacity>
         </View>
         {/* greet and punchline */}
         <View className="mx-4 space-y-2 mb-2">

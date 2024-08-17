@@ -100,4 +100,25 @@ const recipeDetailData = [
   },
 ];
 
-export default { categoryData, mealData, recipeDetailData };
+const notifications = [
+  { id: 1, title: "New recipe added: Spaghetti Carbonara", read: false },
+  { id: 2, title: "Your weekly meal plan is ready!", read: true },
+  { id: 3, title: "Don’t miss out on our new vegan recipes", read: false },
+  { id: 4, title: "Reminder: Grocery list for Chicken Alfredo", read: true },
+  {
+    id: 5,
+    title: "New comment on your favorite recipe: Chocolate Cake",
+    read: false,
+  },
+  { id: 6, title: "20% off on your next meal kit order!", read: true },
+  { id: 7, title: "Your saved recipe: Pancakes with Maple Syrup", read: false },
+  { id: 8, title: "Top 10 summer salad recipes you must try", read: false },
+  { id: 9, title: "New kitchen hacks to save you time!", read: true },
+  {
+    id: 10,
+    title: "Check out trending recipes: Garlic Butter Shrimp",
+    read: false,
+  },
+];
+
+export default { categoryData, mealData, recipeDetailData, notifications };

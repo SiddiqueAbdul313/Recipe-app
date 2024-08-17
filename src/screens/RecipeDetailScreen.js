@@ -134,6 +134,7 @@ export default function RecipeDetailScreen(props) {
         <TouchableOpacity
           className=" bg-white p-2 rounded-3xl"
           onPress={() => props.navigation.goBack()}
+          activeOpacity={0.8}
         >
           <ChevronLeftIcon
             size={hp(3)}

@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -16,19 +17,19 @@ import { COLORS, images, SIZES } from "../constants";
 import useFavoriteStore from "../../store/store";
 import Header from "../components/Header";
 import { StatusBar } from "expo-status-bar";
+import { ArrowRightIcon } from "react-native-heroicons/solid";
 
 export default function ProfileScreen() {
   const { favorites } = useFavoriteStore();
   const navigation = useNavigation();
-  const [noOfRecipes, setNoOfRecipes] = useState(favorites.length)
-  // const noOfRecipes = ;
+  const [noOfRecipes, setNoOfRecipes] = useState(favorites.length);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
         <View className="p-4 bg-zinc-100">
           <View className="my-4">
-            <Header />
+            <Header text="Profile" />
           </View>
           <View className="flex-row justify-between items-center">
             <Image
@@ -78,12 +79,38 @@ export default function ProfileScreen() {
         </View>
 
         <View className="mt-4 px-4">
-          <Text
-            className="text-2xl font-semibold"
-            style={{ color: COLORS.primary }}
-          >
-            {favorites.length === 0 ? "No Recipes Added" : "Favorite Recipes"}
-          </Text>
+          <View>
+            {favorites.length === 0 ? (
+              <View className="gap-5">
+                <Text
+                  className="text-2xl font-semibold"
+                  style={{ color: COLORS.primary }}
+                >
+                  No Recipes Added
+                </Text>
+                <TouchableOpacity
+                  className="flex-row items-center"
+                  activeOpacity={0.8}
+                  onPress={() => navigation.navigate("HomeScreen")}
+                >
+                  <Text style={{ color: COLORS.primary, }}>Add Recipes Now</Text>
+                  <ArrowRightIcon
+                    size={hp(2)}
+                    color={COLORS.primary}
+                    style={{ marginLeft: 5 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <Text
+                className="text-2xl font-semibold"
+                style={{ color: COLORS.primary }}
+              >
+                Favorite Recipes
+              </Text>
+            )}
+          </View>
+
           <View className="flex-row flex-wrap justify-between mt-4">
             {favorites.map((item, index) => (
               <Pressable
