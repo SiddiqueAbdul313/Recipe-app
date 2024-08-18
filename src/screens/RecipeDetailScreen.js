@@ -120,7 +120,7 @@ export default function RecipeDetailScreen(props) {
       {/* recipe images */}
       <View className="flex-row justify-center m-0">
         <Image
-          source={{ uri: meals?.strMealThumb || item.strMealThumb }} // Use fetched data or fallback to passed item
+          source={{ uri: meals?.strMealThumb || item.strMealThumb }} 
           style={{ width: wp(100), height: hp(50) }}
           className="rounded-br-3xl rounded-bl-3xl"
         />

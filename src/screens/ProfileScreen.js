@@ -52,7 +52,7 @@ export default function ProfileScreen() {
                     {noOfRecipes}
                   </Text>
                   <Text className="text-gray-500">
-                    {noOfRecipes < 1 ? "Recipe" : "Recipes"}
+                    {noOfRecipes < 2 ? "Recipe" : "Recipes"}
                   </Text>
                 </View>
                 <View className="items-center">

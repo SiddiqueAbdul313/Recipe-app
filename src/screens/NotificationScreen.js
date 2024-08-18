@@ -71,7 +71,7 @@ const NotificationScreen = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => toggleReadStatus(item.id)}
-            className={`p-4 mb-5 rounded-lg ${
+            className={`p-4 mb-2 rounded-lg ${
               item.read ? "bg-gray-200" : "bg-white"
             }`}
             activeOpacity={0.9}

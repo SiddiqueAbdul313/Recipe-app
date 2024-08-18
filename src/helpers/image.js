@@ -1,45 +1,52 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
+import { Animated } from "react-native";
+import * as FileSystem from "expo-file-system";
 
-import { useEffect, useState } from "react";
-import Animated from "react-native-reanimated";
-
-export const CachedImage = (props) => {
+export const CachedImage = ({ uri, style, ...props }) => {
   const [cachedSource, setCachedSource] = useState(null);
-
-  const { uri } = props;
+  const [opacity] = useState(new Animated.Value(0));
 
   useEffect(() => {
     const getCachedImage = async () => {
+      const fileName = uri.split("/").pop();
+      const filePath = `${FileSystem.cacheDirectory}${fileName}`;
+
       try {
-        const cachedImageData = await AsyncStorage.getItem(uri);
-
-        if (cachedImageData) {
-          setCachedSource({ uri: cachedImageData });
+        const fileInfo = await FileSystem.getInfoAsync(filePath);
+        if (fileInfo.exists) {
+          setCachedSource({ uri: fileInfo.uri });
         } else {
-          const response = await fetch(uri);
-
-          const imageBlob = await response.blob();
-
-          const base64Data = await new Promise((resolve) => {
-            const reader = new FileReader();
-
-            reader.readAsDataURL(imageBlob);
-
-            reader.onloadend = () => {
-              resolve(reader.result);
-            };
-          });
-
-          await AsyncStorage.setItem(uri, base64Data);
-
-          setCachedSource({ uri: base64Data });
+          const downloadResult = await FileSystem.downloadAsync(uri, filePath);
+          if (downloadResult.status === 200) {
+            setCachedSource({ uri: downloadResult.uri });
+          } else {
+            setCachedSource({ uri });
+          }
         }
       } catch (error) {
         console.error("Error caching image:", error);
-        setCachedSource({uri})
+        setCachedSource({ uri });
       }
     };
+
     getCachedImage();
-  }, []);
-  return <Animated.Image source={cachedSource} {...props} />
+  }, [uri]);
+
+  // Fade in animation when the image is loaded
+  const onLoad = () => {
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 500, // duration of the fade-in effect
+      useNativeDriver: true,
+    }).start();
+  };
+
+  return (
+    <Animated.Image
+      source={cachedSource}
+      onLoad={onLoad}
+      style={[style, { opacity }]}
+      {...props}
+    />
+  );
 };

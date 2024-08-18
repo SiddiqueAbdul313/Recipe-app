@@ -18,7 +18,7 @@ const theme = {
 
 const Stack = createStackNavigator();
 
-export const AppNavigation = () => {
+const AppNavigation = () => {
   return (
     <NavigationContainer theme={theme}>
       <Stack.Navigator
@@ -43,3 +43,5 @@ export const AppNavigation = () => {
     </NavigationContainer>
   );
 };
+
+export default AppNavigation;
