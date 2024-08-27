@@ -1,52 +1,52 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React, { useEffect } from "react";
 import { COLORS } from "../constants/theme";
-import { images, icons } from "../constants";
+import { images } from "../constants";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { StatusBar } from "expo-status-bar";
-import Animated, { useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  withSpring,
+  useAnimatedStyle,
+} from "react-native-reanimated";
+import { icons } from "../constants";
 
-const WelcomeScreen = ({navigation}) => {
+const WelcomeScreen = ({ navigation }) => {
   const innerRingPadding = useSharedValue(0);
   const outerRingPadding = useSharedValue(0);
 
   useEffect(() => {
-    outerRingPadding.value = 0;
-    innerRingPadding.value = 0;
-    setTimeout(
-      () =>
-        (outerRingPadding.value = withSpring(
-          outerRingPadding.value + hp(5),
-          100
-        ))
+    outerRingPadding.value = withSpring(hp(5), { stiffness: 100 });
+    innerRingPadding.value = withSpring(hp(5), { stiffness: 300 });
 
-      );
-      setTimeout(
-        () =>
-        (innerRingPadding.value = withSpring(
-          innerRingPadding.value + hp(5),
-          300
-        ))
-    );
-    setTimeout(()=>navigation.navigate("HomeScreen"),3000)
-  }, [outerRingPadding, innerRingPadding]);
+    const timer = setTimeout(() => navigation.navigate("HomeScreen"), 3000);
+    return () => clearTimeout(timer);
+  }, [navigation, outerRingPadding, innerRingPadding]);
+
+  const outerRingStyle = useAnimatedStyle(() => {
+    return { padding: outerRingPadding.value };
+  });
+
+  const innerRingStyle = useAnimatedStyle(() => {
+    return { padding: innerRingPadding.value };
+  });
 
   return (
     <View
-    className="flex-1 justify-center items-center space-y-10"
-    style={{ backgroundColor: COLORS.primary }}
+      className="flex-1 justify-around items-center space-y-10"
+      style={{ backgroundColor: COLORS.primary }}
     >
       <StatusBar style="light" />
       <Animated.View
         className="bg-white/20 rounded-full flex"
-        style={{ padding: outerRingPadding }}
+        style={outerRingStyle}
       >
         <Animated.View
           className="bg-white/20 rounded-full"
-          style={{ padding: innerRingPadding }}
+          style={innerRingStyle}
         >
           <Image
             source={images.WelcomeImage}
@@ -56,7 +56,6 @@ const WelcomeScreen = ({navigation}) => {
         </Animated.View>
       </Animated.View>
 
-      {/* title & punchline */}
       <View className="flex items-center space-y-2">
         <Text
           className="font-bold text-white tracking-widest uppercase"
@@ -71,6 +70,9 @@ const WelcomeScreen = ({navigation}) => {
           No idea? Grab the Foodie!
         </Text>
       </View>
+      <Text className="text-white font-bold flex items-center justify-center text-center">
+        Made with <icons.HeartIcon style={[{ stroke: COLORS.red,fill:COLORS.red }]} /> by Zuheb
+      </Text>
     </View>
   );
 };

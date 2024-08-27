@@ -7,13 +7,12 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { COLORS, images, SIZES } from "../constants";
-import { dummyData } from "../constants";
+import { COLORS, SIZES } from "../constants";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import Animated, { StretchInY } from "react-native-reanimated";
+import Animated, { SlideInLeft } from "react-native-reanimated";
 
 const Categories = ({
   navigation,
@@ -22,7 +21,7 @@ const Categories = ({
   categories,
 }) => {
   return (
-    <Animated.View entering={StretchInY.duration(500).springify()}>
+    <Animated.View entering={SlideInLeft.duration(500).springify().damping(16)}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -30,14 +29,17 @@ const Categories = ({
         contentContainerStyle={{ paddingHorizontal: SIZES.padding2 + 3 }}
       >
         {categories.map((category, index) => {
-          let isActive = category.strCategory == activeCategory;
-          let activeButtonClass = isActive ? "bg-[#ff9626]" : "bg-black/10";
+          const isActive = category.strCategory === activeCategory;
+          const activeButtonClass = isActive ? "bg-[#ff9626]" : "bg-black/10";
+
           return (
             <TouchableOpacity
               key={index}
               className="flex items-center space-y-1"
               activeOpacity={0.8}
               onPress={() => setActiveCategory(category.strCategory)}
+              accessibilityLabel={category.strCategory}
+              accessibilityRole="button"
             >
               <View className={`rounded-full p-[6px] ${activeButtonClass}`}>
                 <Image
@@ -46,7 +48,7 @@ const Categories = ({
                     height: hp(6),
                     width: hp(6),
                   }}
-                  //   resizeMode="cover"
+                  resizeMode="cover"
                   className="rounded-full"
                 />
               </View>

@@ -1,20 +1,30 @@
 import { Pressable, Text, View, Image } from "react-native";
-import React from "react";
+import React, { useMemo } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { COLORS, SIZES } from "../constants";
 import MasonryList from "@react-native-seoul/masonry-list";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "./loading";
+
+const prefetchImage = (url) => {
+  if (url) {
+    Image.prefetch(url);
+  }
+};
 
 export default function Recipes({ categories = [], meals = [] }) {
   const navigation = useNavigation();
 
   return (
-    <View className="mx-4 space-y-3">
+    <Animated.View
+      className="mx-4 space-y-3"
+      entering={FadeInDown.duration(500).springify().damping(10)}
+      exiting={FadeOutDown.duration(500).springify().damping(10)}
+    >
       <Text
         className="text-3xl font-semibold"
         style={{ color: COLORS.darkgray }}
@@ -39,20 +49,19 @@ export default function Recipes({ categories = [], meals = [] }) {
           />
         )}
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
 const RecipeCard = ({ item, index, navigation }) => {
   let isEven = index % 2 === 0;
 
+  useMemo(() => {
+    prefetchImage(item.strMealThumb);
+  }, [item.strMealThumb]);
+
   return (
-    <Animated.View
-      entering={FadeInDown.delay(index * 100)
-        .duration(600)
-        .springify()
-        .damping(20)}
-    >
+    <Animated.View entering={FadeInDown.duration(500).springify().damping(10)}>
       <Pressable
         className="flex justify-center mb-4 space-y-1"
         style={{

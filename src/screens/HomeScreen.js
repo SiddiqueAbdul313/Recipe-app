@@ -8,7 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -20,6 +20,7 @@ import Categories from "../components/categories";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Recipes from "../components/recipes";
+import Animated, { Easing, FadeInDown, FadeOutDown } from "react-native-reanimated";
 
 const fetchCategories = async () => {
   const response = await axios.get(
@@ -56,8 +57,13 @@ const HomeScreen = ({ navigation }) => {
     enabled: !!activeCategory,
   });
 
+  const hasNoResults = searchTerm && meals.length === 0;
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <View
+      className="flex-1 bg-white"
+      entering={FadeInDown.duration(500).easing(Easing.ease)}
+    >
       <StatusBar style="dark" />
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -82,7 +88,6 @@ const HomeScreen = ({ navigation }) => {
             <BellIcon size={hp(4)} color={COLORS.primary} />
           </TouchableOpacity>
         </View>
-        {/* greet and punchline */}
         <View className="mx-4 space-y-2 mb-2">
           <Text style={{ fontSize: hp(2.1), color: COLORS.darkgray }}>
             Hello! Abdul
@@ -102,7 +107,6 @@ const HomeScreen = ({ navigation }) => {
             It's all at <Text style={{ color: COLORS.secondary }}>home</Text>
           </Text>
         </View>
-        {/* Searchbar */}
         <View className="mx-4 items-center rounded-full flex-row bg-black/5 p-[6px] mb-2">
           <TextInput
             placeholder="Search recipe..."
@@ -120,23 +124,35 @@ const HomeScreen = ({ navigation }) => {
             <MagnifyingGlassIcon size={hp(2.7)} color={COLORS.darkgray} />
           </View>
         </View>
-        {/* categories */}
-        <View>
-          {categories.length > 0 && (
-            <Categories
-              categories={categories}
-              activeCategory={activeCategory}
-              setActiveCategory={setActiveCategory}
-            />
+        {categories.length > 0 && (
+          <Categories
+            categories={categories}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+          />
+        )}
+        <Animated.View
+          entering={FadeInDown.duration(500).springify().damping(16)}
+          exiting={FadeOutDown.duration(500).springify().damping(16)}
+        >
+          {hasNoResults ? (
+            <View className="flex-1 justify-center items-center">
+              <Text
+                style={{
+                  color: COLORS.primary,
+                  fontSize: hp(2.5),
+                  fontWeight: 700,
+                }}
+              >
+                Recipes not found
+              </Text>
+            </View>
+          ) : (
+            <Recipes categories={categories} meals={meals} />
           )}
-        </View>
-
-        {/* recipes */}
-        <View>
-          <Recipes categories={categories} meals={meals} />
-        </View>
+        </Animated.View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

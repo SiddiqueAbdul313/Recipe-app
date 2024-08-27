@@ -1,4 +1,3 @@
-// store.js
 import { create } from "zustand";
 
 const useFavoriteStore = create((set) => ({
@@ -10,5 +9,11 @@ const useFavoriteStore = create((set) => ({
       favorites: state.favorites.filter((recipe) => recipe.idMeal !== idMeal),
     })),
 }));
+
+export const useThemeStore = create((set) => ({
+  isDarkMode: false,
+  toggleTheme: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
+}));
+
 
 export default useFavoriteStore;

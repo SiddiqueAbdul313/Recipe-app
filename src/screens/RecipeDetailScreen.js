@@ -19,8 +19,8 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-  FadeIn,
   FadeInDown,
+  FadeIn,
 } from "react-native-reanimated";
 import axios from "axios";
 import { WebView } from "react-native-webview";
@@ -29,10 +29,10 @@ import Toast from "react-native-toast-message";
 
 export default function RecipeDetailScreen(props) {
   let item = props.route.params;
-  const { favorites, addFavorite, removeFavorite } = useFavoriteStore(); // Access Zustand store
+  const { favorites, addFavorite, removeFavorite } = useFavoriteStore();
   const [heartIcon, setHeartIcon] = useState(
     favorites.some((fav) => fav.idMeal === item.idMeal)
-  ); // Check if already favorited
+  );
   const [meals, setMeals] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,11 +61,9 @@ export default function RecipeDetailScreen(props) {
     }
   };
 
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scale.value }],
-    };
-  });
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   useEffect(() => {
     const getMealData = async (id) => {
@@ -76,7 +74,6 @@ export default function RecipeDetailScreen(props) {
         setMeals(response.data.meals[0]);
         setLoading(false);
       } catch (error) {
-        console.error("Failed to fetch meal data", error);
         setLoading(false);
       }
     };
@@ -117,22 +114,23 @@ export default function RecipeDetailScreen(props) {
     >
       <StatusBar style="light" />
 
-      {/* recipe images */}
-      <View className="flex-row justify-center m-0">
+      <Animated.View
+        className="flex-row justify-center m-0"
+        entering={FadeIn.duration(100).springify().damping(16)}
+      >
         <Image
-          source={{ uri: meals?.strMealThumb || item.strMealThumb }} 
+          source={{ uri: meals?.strMealThumb || item.strMealThumb }}
           style={{ width: wp(100), height: hp(50) }}
-          className="rounded-br-3xl rounded-bl-3xl"
+          className="rounded-br-3xl rounded-bl-3xl m-0 p-0"
         />
-      </View>
+      </Animated.View>
 
-      {/* back button and heart icon */}
       <Animated.View
         className="w-full absolute flex-row justify-between items-center pt-10 px-3"
-        entering={FadeIn.delay(200).duration(1000)}
+        entering={FadeInDown.duration(300)}
       >
         <TouchableOpacity
-          className=" bg-white p-2 rounded-3xl"
+          className="bg-white p-2 rounded-3xl"
           onPress={() => props.navigation.goBack()}
           activeOpacity={0.8}
         >
@@ -143,7 +141,7 @@ export default function RecipeDetailScreen(props) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          className=" bg-white p-2 rounded-3xl"
+          className="bg-white p-2 rounded-3xl"
           onPress={toggleHeartIcon}
           activeOpacity={0.8}
         >
@@ -162,9 +160,7 @@ export default function RecipeDetailScreen(props) {
         </TouchableOpacity>
       </Animated.View>
 
-      {/* meal details */}
       <View className="p-5 flex justify-between space-y-2">
-        {/* name and area */}
         <Animated.View
           entering={FadeInDown.duration(700).springify().damping(12)}
           className="space-y-2"
@@ -180,7 +176,6 @@ export default function RecipeDetailScreen(props) {
           </Text>
         </Animated.View>
 
-        {/* miscellaneous */}
         <Animated.View
           entering={FadeInDown.delay(100).duration(700).springify().damping(12)}
           className="flex-row justify-around"
@@ -215,7 +210,6 @@ export default function RecipeDetailScreen(props) {
           ))}
         </Animated.View>
 
-        {/* Ingredients */}
         <Animated.View
           entering={FadeInDown.delay(200).duration(700).springify().damping(12)}
           className="space-y-4"
@@ -227,38 +221,35 @@ export default function RecipeDetailScreen(props) {
             Ingredients
           </Text>
           <View className="space-y-2 ml-3">
-            {ingredientsIndexes(meals).map((i) => {
-              return (
-                <View key={i} className="flex-row items-center space-x-4">
-                  <View
-                    style={{
-                      height: hp(1.5),
-                      width: hp(1.5),
-                      backgroundColor: COLORS.primary,
-                    }}
-                    className="rounded-full"
-                  />
-                  <View className="flex-row space-x-2">
-                    <Text
-                      className="font-extrabold"
-                      style={{ color: COLORS.darkgray, fontSize: hp(2) }}
-                    >
-                      {meals["strMeasure" + i]}
-                    </Text>
-                    <Text
-                      className="font-medium"
-                      style={{ color: COLORS.darkgray, fontSize: hp(2) }}
-                    >
-                      {meals["strIngredient" + i]}
-                    </Text>
-                  </View>
+            {ingredientsIndexes(meals).map((i) => (
+              <View key={i} className="flex-row items-center space-x-4">
+                <View
+                  style={{
+                    height: hp(1.5),
+                    width: hp(1.5),
+                    backgroundColor: COLORS.primary,
+                  }}
+                  className="rounded-full"
+                />
+                <View className="flex-row space-x-2">
+                  <Text
+                    className="font-extrabold"
+                    style={{ color: COLORS.darkgray, fontSize: hp(2) }}
+                  >
+                    {meals["strMeasure" + i]}
+                  </Text>
+                  <Text
+                    className="font-medium"
+                    style={{ color: COLORS.darkgray, fontSize: hp(2) }}
+                  >
+                    {meals["strIngredient" + i]}
+                  </Text>
                 </View>
-              );
-            })}
+              </View>
+            ))}
           </View>
         </Animated.View>
 
-        {/* instructions */}
         <Animated.View
           entering={FadeInDown.delay(300).duration(700).springify().damping(12)}
           className="space-y-4"
@@ -276,7 +267,6 @@ export default function RecipeDetailScreen(props) {
             {meals?.strInstructions}
           </Text>
         </Animated.View>
-        {/* YT reference */}
         {meals.strYoutube && (
           <View className="space-y-4">
             <Text
@@ -298,7 +288,6 @@ export default function RecipeDetailScreen(props) {
                     meals.strYoutube
                   )}`,
                 }}
-                style={{ flex: 1 }}
               />
             </View>
           </View>
@@ -307,3 +296,5 @@ export default function RecipeDetailScreen(props) {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({});

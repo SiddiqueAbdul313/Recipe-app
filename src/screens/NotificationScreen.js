@@ -1,26 +1,19 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-  ScrollView,
-} from "react-native";
-import { styled } from "nativewind";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import { COLORS, dummyData } from "../constants";
 import Header from "../components/Header";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { CheckCircleIcon, CheckIcon } from "react-native-heroicons/solid";
+import { CheckCircleIcon } from "react-native-heroicons/solid";
+import Animated, { SlideInRight, SlideOutRight } from "react-native-reanimated";
 
 const NotificationScreen = () => {
   const [notificationData, setNotificationData] = useState(
     dummyData.notifications
   );
-  const [allRead, setAllRead] = useState(notificationData);
+  const [allRead, setAllRead] = useState(false);
 
   const markAllAsRead = () => {
     const updatedNotifications = notificationData.map((notification) => ({
@@ -50,18 +43,21 @@ const NotificationScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 p-4">
+    <Animated.View
+      className="flex-1 p-4"
+      entering={SlideInRight.duration(500).springify().damping(15)}
+      exiting={SlideOutRight.duration(500)}
+    >
       <View className="mb-2 pt-4 flex-row items-center justify-between">
         <Header text="Notifications" />
         <TouchableOpacity
           onPress={allRead ? markAllAsUnread : markAllAsRead}
           className="rounded-lg"
         >
-          {allRead ? (
-            <CheckCircleIcon color={COLORS.success} size={hp(4)} />
-          ) : (
-            <CheckCircleIcon color={COLORS.primary} size={hp(4)} />
-          )}
+          <CheckCircleIcon
+            color={allRead ? COLORS.success : COLORS.primary}
+            size={hp(4)}
+          />
         </TouchableOpacity>
       </View>
       <FlatList
@@ -83,27 +79,16 @@ const NotificationScreen = () => {
             >
               {item.title}
             </Text>
-            <Text className="text-sm text-gray-500">
-              {item.read ? (
-                <View
-                  className=" rounded-full"
-                  style={{
-                    height: hp(1),
-                    width: hp(1),
-                    backgroundColor: COLORS.success,
-                  }}
-                ></View>
-              ) : (
-                <View
-                  className="bg-amber-500 rounded-full"
-                  style={{ height: hp(1), width: hp(1) }}
-                ></View>
-              )}
-            </Text>
+            <View
+              className={`rounded-full ${
+                item.read ? "bg-success" : "bg-amber-500"
+              }`}
+              style={{ height: hp(1), width: hp(1) }}
+            />
           </TouchableOpacity>
         )}
       />
-    </SafeAreaView>
+    </Animated.View>
   );
 };
 

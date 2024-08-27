@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   ScrollView,
   Image,
   Pressable,
   TouchableOpacity,
 } from "react-native";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, images, SIZES } from "../constants";
 import useFavoriteStore from "../../store/store";
 import Header from "../components/Header";
-import { StatusBar } from "expo-status-bar";
 import { ArrowRightIcon } from "react-native-heroicons/solid";
+import Animated, {
+  Easing,
+  SlideInLeft,
+  SlideOutLeft,
+} from "react-native-reanimated";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 export default function ProfileScreen() {
   const { favorites } = useFavoriteStore();
@@ -25,8 +25,12 @@ export default function ProfileScreen() {
   const [noOfRecipes, setNoOfRecipes] = useState(favorites.length);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <ScrollView contentContainerStyle={{ paddingBottom: 30 }}>
+    <View className="flex-1 bg-white">
+      <Animated.ScrollView
+        contentContainerStyle={{ paddingBottom: 30 }}
+        entering={SlideInLeft.duration(500).springify().damping(16)}
+        exiting={SlideOutLeft.duration(500).springify().easing(Easing.ease)}
+      >
         <View className="p-4 bg-zinc-100">
           <View className="my-4">
             <Header text="Profile" />
@@ -93,7 +97,7 @@ export default function ProfileScreen() {
                   activeOpacity={0.8}
                   onPress={() => navigation.navigate("HomeScreen")}
                 >
-                  <Text style={{ color: COLORS.primary, }}>Add Recipes Now</Text>
+                  <Text style={{ color: COLORS.primary }}>Add Recipes Now</Text>
                   <ArrowRightIcon
                     size={hp(2)}
                     color={COLORS.primary}
@@ -112,7 +116,7 @@ export default function ProfileScreen() {
           </View>
 
           <View className="flex-row flex-wrap justify-between mt-4">
-            {favorites.map((item, index) => (
+            {favorites.map((item) => (
               <Pressable
                 key={item.idMeal}
                 className="mb-4"
@@ -139,14 +143,14 @@ export default function ProfileScreen() {
                   }}
                 >
                   {item.strMeal.length > 20
-                    ? item.strMeal.slice(0, 20) + "..."
+                    ? `${item.strMeal.slice(0, 20)}...`
                     : item.strMeal}
                 </Text>
               </Pressable>
             ))}
           </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </Animated.ScrollView>
+    </View>
   );
 }
