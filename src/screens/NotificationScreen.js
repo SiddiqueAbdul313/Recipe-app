@@ -72,19 +72,21 @@ const NotificationScreen = () => {
             }`}
             activeOpacity={0.9}
           >
-            <Text
-              className={`text-lg ${
-                item.read ? "text-gray-600" : "text-black"
-              }`}
-            >
-              {item.title}
-            </Text>
-            <View
-              className={`rounded-full ${
-                item.read ? "bg-success" : "bg-amber-500"
-              }`}
-              style={{ height: hp(1), width: hp(1) }}
-            />
+            <View className="flex-col items-start ">
+              <Text
+                className={`text-lg ${
+                  item.read ? "text-gray-600" : "text-black"
+                }`}
+              >
+                {item.title}
+              </Text>
+              <View
+                className={`rounded-full ${
+                  item.read ? "bg-green-500" : "bg-amber-500"
+                }`}
+                style={{ height: hp(1), width: hp(1) }}
+              />
+            </View>
           </TouchableOpacity>
         )}
       />
