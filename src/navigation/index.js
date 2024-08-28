@@ -25,7 +25,7 @@ const AppNavigation = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName=""
+        initialRouteName="WelcomeScreen"
       >
         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
